@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Practice spelling bee words with pronunciation">
+  <meta name="theme-color" content="#667eea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>PracticeBee</title>
+
+  <!-- Google Fonts - Nunito for kid-friendly look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1><span class="bee-icon">🐝</span> PracticeBee</h1>
+    </header>
+
+    <!-- Start Screen -->
+    <main id="start-screen" class="screen">
+      <p class="welcome-message">
+        Welcome! Let's practice spelling together!
+      </p>
+
+      <!-- Mode Selection -->
+      <div class="mode-selection">
+        <h2>Choose how to practice:</h2>
+        <div class="mode-buttons">
+          <button class="mode-btn active" data-mode="sequential">
+            <span class="icon">📖</span>
+            In Order
+          </button>
+          <button class="mode-btn" data-mode="random">
+            <span class="icon">🎲</span>
+            Random
+          </button>
+        </div>
+      </div>
+
+      <!-- Difficulty Level Filter -->
+      <div class="level-selection">
+        <h2>Choose difficulty:</h2>
+        <div class="level-buttons">
+          <button class="level-btn active" data-level="all">
+            <span class="icon">🌟</span>
+            All Words
+          </button>
+          <button class="level-btn" data-level="One Bee">
+            <span class="icon">🐝</span>
+            One Bee
+          </button>
+          <button class="level-btn" data-level="Two Bee">
+            <span class="icon">🐝🐝</span>
+            Two Bee
+          </button>
+          <button class="level-btn" data-level="Three Bee">
+            <span class="icon">🐝🐝🐝</span>
+            Three Bee
+          </button>
+        </div>
+      </div>
+
+      <!-- Start Position -->
+      <div id="position-group" class="position-input">
+        <label for="start-position">Start from word number:</label>
+        <div class="position-row">
+          <input type="number" id="start-position" min="1" max="450" value="1">
+          <span>of <strong id="max-position">450</strong></span>
+        </div>
+      </div>
+
+      <!-- Start Button -->
+      <button id="start-btn" class="btn btn-primary btn-large">
+        Let's Go! 🚀
+      </button>
+    </main>
+
+    <!-- Practice Screen -->
+    <main id="practice-screen" class="screen hidden">
+      <!-- Header with word info and home button -->
+      <div class="practice-header">
+        <div class="word-info">
+          <span id="word-number">Word #1</span>
+          <span id="word-level" class="word-level">One Bee</span>
+        </div>
+        <button id="home-btn" class="btn btn-outline btn-icon" title="Go back">🏠</button>
+      </div>
+
+      <!-- Prompt Area -->
+      <div class="prompt-area">
+        <p class="prompt-text">Listen to the word, then spell it!</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button id="speak-btn" class="btn btn-large btn-speak" title="Hear the word">
+          🔊 Hear Word
+        </button>
+        <button id="sentence-btn" class="btn btn-sentence" title="Hear an example sentence">
+          📝 Example
+        </button>
+        <button id="hint-btn" class="btn btn-hint" title="Get a hint">
+          💡 Hint
+        </button>
+      </div>
+
+      <!-- Spelling Input -->
+      <div class="input-area">
+        <input
+          type="text"
+          id="spelling-input"
+          placeholder="Type your spelling..."
+          autocomplete="off"
+          autocapitalize="none"
+          autocorrect="off"
+          spellcheck="false"
+        >
+        <div class="submit-buttons">
+          <button id="check-btn" class="btn btn-primary">
+            ✓ Check Spelling
+          </button>
+          <button id="skip-btn" class="btn btn-outline">
+            Skip →
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-bar">
+          <div id="progress-fill"></div>
+        </div>
+        <p id="progress-text">Word 1 of 450</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Streak</span>
+          <span id="streak-count" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Accuracy</span>
+          <span id="accuracy-percent" class="stat-value">0%</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Result Screen -->
+    <main id="result-screen" class="screen hidden">
+      <div id="result-icon" class="result-icon"></div>
+      <h2 id="result-message">Great job!</h2>
+      <div id="correct-spelling"></div>
+      <div class="result-buttons">
+        <button id="retry-btn" class="btn btn-outline hidden">
+          🔄 Try Again
+        </button>
+        <button id="next-btn" class="btn btn-success">
+          Next Word →
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
