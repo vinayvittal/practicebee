@@ -70,6 +70,7 @@ class SpellingBeeApp {
     this.wordNumber = document.getElementById('word-number');
     this.wordLevel = document.getElementById('word-level');
     this.speakBtn = document.getElementById('speak-btn');
+    this.slowBtn = document.getElementById('slow-btn');
     this.sentenceBtn = document.getElementById('sentence-btn');
     this.hintBtn = document.getElementById('hint-btn');
     this.spellingInput = document.getElementById('spelling-input');
@@ -115,6 +116,9 @@ class SpellingBeeApp {
 
     // Speak button
     this.speakBtn.addEventListener('click', () => this.speakWord());
+
+    // Slow repeat button
+    this.slowBtn.addEventListener('click', () => this.speakWordSlowly());
 
     // Sentence button
     this.sentenceBtn.addEventListener('click', () => this.speakSentence());
@@ -270,6 +274,13 @@ class SpellingBeeApp {
     this.speakBtn.classList.add('speaking');
     speechManager.speakWordInSentence(this.currentWord.word, () => {
       this.speakBtn.classList.remove('speaking');
+    });
+  }
+
+  speakWordSlowly() {
+    this.slowBtn.classList.add('speaking');
+    speechManager.speakWordSlowly(this.currentWord.word, () => {
+      this.slowBtn.classList.remove('speaking');
     });
   }
 

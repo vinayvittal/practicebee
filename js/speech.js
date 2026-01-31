@@ -62,6 +62,31 @@ class SpeechManager {
     return this.speak(`Your word is: ${word}`, onEnd);
   }
 
+  speakWordSlowly(word, onEnd = null) {
+    if (!this.supported) {
+      console.warn('Speech synthesis not supported');
+      if (onEnd) onEnd();
+      return false;
+    }
+
+    // Cancel any ongoing speech
+    this.synth.cancel();
+
+    // Speak the word 3 times at a very slow rate with pauses
+    const utterance = new SpeechSynthesisUtterance(`${word} ... ${word} ... ${word}`);
+    utterance.voice = this.voice;
+    utterance.rate = 0.5; // Very slow for maximum clarity
+    utterance.pitch = this.pitch;
+
+    if (onEnd) {
+      utterance.onend = onEnd;
+      utterance.onerror = onEnd;
+    }
+
+    this.synth.speak(utterance);
+    return true;
+  }
+
   stop() {
     if (this.supported) {
       this.synth.cancel();
