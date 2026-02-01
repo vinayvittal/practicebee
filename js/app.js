@@ -70,9 +70,7 @@ class SpellingBeeApp {
     this.wordNumber = document.getElementById('word-number');
     this.wordLevel = document.getElementById('word-level');
     this.speakBtn = document.getElementById('speak-btn');
-    this.slowBtn = document.getElementById('slow-btn');
     this.sentenceBtn = document.getElementById('sentence-btn');
-    this.hintBtn = document.getElementById('hint-btn');
     this.spellingInput = document.getElementById('spelling-input');
     this.checkBtn = document.getElementById('check-btn');
     this.skipBtn = document.getElementById('skip-btn');
@@ -114,17 +112,11 @@ class SpellingBeeApp {
       if (e.key === 'Enter') this.startPractice();
     });
 
-    // Speak button
+    // Speak button (uses slow repeat as default)
     this.speakBtn.addEventListener('click', () => this.speakWord());
-
-    // Slow repeat button
-    this.slowBtn.addEventListener('click', () => this.speakWordSlowly());
 
     // Sentence button
     this.sentenceBtn.addEventListener('click', () => this.speakSentence());
-
-    // Hint button
-    this.hintBtn.addEventListener('click', () => this.showHint());
 
     // Check spelling
     this.checkBtn.addEventListener('click', () => this.checkSpelling());
@@ -254,10 +246,6 @@ class SpellingBeeApp {
     this.spellingInput.classList.remove('correct', 'incorrect');
     this.spellingInput.focus();
 
-    // Reset hint button
-    this.hintBtn.textContent = 'Show Hint';
-    this.hintBtn.disabled = false;
-
     // Update progress
     this.updateProgress();
 
@@ -272,15 +260,8 @@ class SpellingBeeApp {
 
   speakWord() {
     this.speakBtn.classList.add('speaking');
-    speechManager.speakWordInSentence(this.currentWord.word, () => {
-      this.speakBtn.classList.remove('speaking');
-    });
-  }
-
-  speakWordSlowly() {
-    this.slowBtn.classList.add('speaking');
     speechManager.speakWordSlowly(this.currentWord.word, () => {
-      this.slowBtn.classList.remove('speaking');
+      this.speakBtn.classList.remove('speaking');
     });
   }
 
@@ -297,16 +278,6 @@ class SpellingBeeApp {
       // Fallback: just speak the word in context
       this.speakWord();
     }
-  }
-
-  showHint() {
-    if (!this.currentWord) return;
-
-    const word = this.currentWord.word;
-    const hint = word[0] + '_'.repeat(word.length - 1);
-
-    this.hintBtn.textContent = `Starts with "${word[0]}" (${word.length} letters)`;
-    this.hintBtn.disabled = true;
   }
 
   checkSpelling() {
@@ -331,18 +302,32 @@ class SpellingBeeApp {
     this.showResult(isCorrect, userInput);
   }
 
+  // Remove diacritics/accents from a string (e.g., "señor" -> "senor")
+  removeDiacritics(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
   isSpellingCorrect(userInput) {
     const normalizedInput = userInput.toLowerCase().trim();
     const correctWord = this.currentWord.word.toLowerCase();
 
-    // Check main spelling
+    // Check main spelling (exact match)
     if (normalizedInput === correctWord) return true;
+
+    // Check if input without diacritics matches word without diacritics
+    const inputNoDiacritics = this.removeDiacritics(normalizedInput);
+    const wordNoDiacritics = this.removeDiacritics(correctWord);
+    if (inputNoDiacritics === wordNoDiacritics) return true;
 
     // Check alternate spellings if available
     if (this.currentWord.alternates) {
-      return this.currentWord.alternates.some(
-        alt => normalizedInput === alt.toLowerCase()
-      );
+      return this.currentWord.alternates.some(alt => {
+        const altLower = alt.toLowerCase();
+        if (normalizedInput === altLower) return true;
+        // Also check alternates without diacritics
+        if (inputNoDiacritics === this.removeDiacritics(altLower)) return true;
+        return false;
+      });
     }
 
     return false;
